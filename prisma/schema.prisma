@@ -1,0 +1,226 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//to visualize schema use tool https://prisma-editor.vercel.app/schema/store
+
+model User {
+  id                      Int              @id @default(autoincrement())
+  email                   String           @unique @db.VarChar(255)
+  firstName               String?          @db.VarChar(255)
+  lastName                String?          @db.VarChar(255)
+  passwordHash            String?          @db.VarChar(255)
+  image                   String?          @db.VarChar(255)
+  signature               String?          @db.VarChar(255)
+  memberships             Membership[]
+  verified                Boolean          @default(false)
+  verifyToken             String?          @unique @db.VarChar(255)
+  passwordResetToken      String?          @unique @db.VarChar(255)
+  passwordResetExpireDate DateTime?
+  emailChangeLog          EmailChangeLog[]
+
+  InspectionInstanceCreatedBy   InspectionInstance[] @relation("CreatedBy")
+  InspectionInstanceUpdatedBy   InspectionInstance[] @relation("UpdatedBy")
+  InspectionInstanceStartedBy   InspectionInstance[] @relation("StartedBy")
+  InspectionInstanceCompletedBy InspectionInstance[] @relation("CompletedBy")
+}
+
+model Membership {
+  id           Int              @id @default(autoincrement())
+  userId       Int
+  user         User             @relation(fields: [userId], references: [id])
+  orgId        Int
+  org          Organisation     @relation(fields: [orgId], references: [id])
+  roleId       Int
+  role         Role             @relation(fields: [roleId], references: [id])
+  status       MembershipStatus
+  inviteSentAt DateTime?
+  inviteToken  String?          @unique @db.VarChar(255)
+}
+
+model Organisation {
+  id                 Int                  @id @default(autoincrement())
+  name               String               @db.VarChar(255)
+  memberships        Membership[]
+  description        String?              @db.VarChar(255)
+  address            String?              @db.VarChar(255)
+  city               String?              @db.VarChar(255)
+  country            String?              @db.VarChar(255)
+  postcode           String?              @db.VarChar(255)
+  icon               String?              @db.VarChar(255)
+  Asset              Asset[]
+  InspectionInstance InspectionInstance[]
+}
+
+model Role {
+  id                      Int          @id @default(autoincrement())
+  roleName                String       @unique
+  organisationUpdate      Boolean
+  organisationManageUsers Boolean
+  assetManage             Boolean
+  inspectionManage        Boolean
+  inspectionCarryOut      Boolean
+  defectConfigure         Boolean
+  defectRaise             Boolean
+  defectCloseOut          Boolean
+  maintenanceManage       Boolean
+  maintenaceCarryOut      Boolean
+  maintenanceAllocate     Boolean
+  Membership              Membership[]
+}
+
+model EmailChangeLog {
+  id               Int      @id @default(autoincrement())
+  userId           Int
+  user             User     @relation(fields: [userId], references: [id])
+  newEmail         String
+  changeEmailToken String
+  verified         Boolean  @default(false)
+  createdAt        DateTime @default(now())
+}
+
+model Asset {
+  id                 Int                  @id @default(autoincrement())
+  organisationId     Int
+  categoryId         Int
+  category           AssetCategory        @relation(fields: [categoryId], references: [id])
+  organisation       Organisation         @relation(fields: [organisationId], references: [id])
+  properties         AssetProperties[]
+  InspectionInstance InspectionInstance[]
+}
+
+model AssetCategory {
+  id                 Int                  @id @default(autoincrement())
+  name               String               @unique @db.VarChar(255)
+  assets             Asset[]
+  categoryProperties CategoryProperties[]
+}
+
+model CategoryProperties {
+  id                 Int                  @id @default(autoincrement())
+  label              String               @unique @db.VarChar(255)
+  options            String[]
+  placeholder        String?              @db.VarChar(255)
+  type               CategoryPropertyType
+  defaultValueString String?              @db.VarChar(255)
+  properties         AssetProperties[]
+  category           AssetCategory[]
+}
+
+model AssetProperties {
+  id                   Int                @id @default(autoincrement())
+  booleanValue         Boolean?
+  latitudeValue        Float?
+  longitudeValue       Float?
+  floatValue           Float?
+  integerValue         Int?
+  stringValue          String?
+  stringArrayValue     String[]
+  categoryPropertiesId Int
+  assetId              Int
+  asset                Asset              @relation(fields: [assetId], references: [id])
+  categoryProperty     CategoryProperties @relation(fields: [categoryPropertiesId], references: [id])
+}
+
+enum CategoryPropertyType {
+  STRING
+  INTEGER
+  LIST
+  COORDINATE
+  IMAGE
+  MONEY
+  INTERNAL
+  STRINGLONG
+}
+
+enum MembershipStatus {
+  PENDING
+  ACTIVE
+  INACTIVE
+  PAUSED
+}
+
+model InspectionForm {
+  id                     Int                      @id @default(autoincrement())
+  name                   String
+  version                Int
+  inspectionFormQuestion InspectionFormQuestion[]
+  InspectionInstance     InspectionInstance[]
+  global                 Boolean                  @default(false)
+  uniqueGlobalId         String?                  @unique // A unique value used to so we can upsert them in the seeder
+}
+
+model InspectionFormQuestion {
+  id                       Int                        @id @default(autoincrement())
+  label                    String
+  questionType             InspectionFormQuestionType
+  inspectionFormId         Int
+  inspectionForm           InspectionForm             @relation(fields: [inspectionFormId], references: [id])
+  InspectionInstanceAnswer InspectionInstanceAnswer[]
+}
+
+enum InspectionFormQuestionType {
+  StringLong
+  PassFail
+  Images
+}
+
+model InspectionInstance {
+  id                       Int                                 @id @default(autoincrement())
+  inspectionFormId         Int
+  inspectionForm           InspectionForm                      @relation(fields: [inspectionFormId], references: [id])
+  createdAt                DateTime                            @default(now())
+  createdById              Int
+  createdBy                User                                @relation("CreatedBy", fields: [createdById], references: [id])
+  startedAt                DateTime?                           @default(now())
+  startedById              Int?
+  startedBy                User?                               @relation("StartedBy", fields: [startedById], references: [id])
+  completedAt              DateTime?                           @default(now())
+  completedById            Int?
+  completedBy              User?                               @relation("CompletedBy", fields: [completedById], references: [id])
+  updatedAt                DateTime                            @default(now())
+  updatedById              Int
+  updatedBy                User                                @relation("UpdatedBy", fields: [updatedById], references: [id])
+  assetId                  Int?
+  asset                    Asset?                              @relation(fields: [assetId], references: [id])
+  LocationLng              Float?
+  LocationLat              Float?
+  organisationId           Int
+  organisation             Organisation                        @relation(fields: [organisationId], references: [id])
+  InspectionOrgUniqueId    String
+  PlatformID               String                              @unique
+  SupportingFiles          InspectionInstanceSupportingFiles[]
+  Status                   InspectionInstanceStatus
+  InspectionInstanceAnswer InspectionInstanceAnswer[]
+  inspectionReference      String
+}
+
+model InspectionInstanceSupportingFiles {
+  id                   Int                @id @default(autoincrement())
+  inspectionFileUrl    String
+  inspectionFileSize   String
+  inspectionInstanceId Int
+  inspectionFile       InspectionInstance @relation(fields: [inspectionInstanceId], references: [id])
+}
+
+enum InspectionInstanceStatus {
+  SCHEDULED
+  STARTED
+  COMPLETED
+}
+
+model InspectionInstanceAnswer {
+  id                       Int                    @id @default(autoincrement())
+  stringValue              String?
+  stringArrayValue         String[]
+  booleanValue             Boolean?
+  inspectionInstance       InspectionInstance     @relation(fields: [inspectionInstanceId], references: [id])
+  inspectionInstanceId     Int
+  inspectionFormQuestionId Int
+  inspectionFormQuestion   InspectionFormQuestion @relation(fields: [inspectionFormQuestionId], references: [id])
+}

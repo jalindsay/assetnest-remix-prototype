@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../app/styles/typography.tsx"],
+  "sourcesContent": ["// REMIX HMR BEGIN\nimport * as __hmr__ from \"remix:hmr\";\nif (import.meta) {\nimport.meta.hot = __hmr__.createHotContext(\n//@ts-expect-error\n\"app/styles/typography.tsx\"\n);\nimport.meta.hot.lastModified = \"1700413891166.2212\";\n}\n// REMIX HMR END\n\nexport const secondaryText = 'text-gray-500'\nexport const pageTitle = 'text-2xl font-bold'\nexport const importantText = 'font-semibold'\nexport const subPageTitle = 'text-xl font-bold'\nexport const textRegular = 'text-sm text-black'\nexport const tableHeader = 'font-semibold text-black text-base'\n"],
+  "mappings": ";;;;;AAEA,IAAI,aAAa;AACjB,cAAY,MAAc;AAAA;AAAA,IAE1B;AAAA,EACA;AACA,cAAY,IAAI,eAAe;AAC/B;AAGO,IAAM,gBAAgB;AACtB,IAAM,YAAY;AAClB,IAAM,gBAAgB;AACtB,IAAM,eAAe;AACrB,IAAM,cAAc;AACpB,IAAM,cAAc;",
+  "names": []
+}

@@ -1,0 +1,6 @@
+export const secondaryText = 'text-gray-500'
+export const pageTitle = 'text-2xl font-bold'
+export const importantText = 'font-semibold'
+export const subPageTitle = 'text-xl font-bold'
+export const textRegular = 'text-sm text-black'
+export const tableHeader = 'font-semibold text-black text-base'

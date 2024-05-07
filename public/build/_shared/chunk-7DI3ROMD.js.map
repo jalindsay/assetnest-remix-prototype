@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../app/utils/downloadFile.ts"],
+  "sourcesContent": ["// REMIX HMR BEGIN\nimport * as __hmr__ from \"remix:hmr\";\nif (import.meta) {\nimport.meta.hot = __hmr__.createHotContext(\n//@ts-expect-error\n\"app/utils/downloadFile.ts\"\n);\nimport.meta.hot.lastModified = \"1706454925363.11\";\n}\n// REMIX HMR END\n\nimport type { StorageClient } from '@supabase/storage-js'\n\nexport const downloadFile = async (\n  storageClient: StorageClient,\n  filePath: string,\n  fileNameWithExtension: string,\n) => {\n  const blob = await storageClient.from('assetnest').download(filePath)\n  if (blob.data) {\n    const url = window.URL.createObjectURL(blob.data)\n    const link = document.createElement('a')\n    link.href = url\n    link.download = fileNameWithExtension\n    document.body.appendChild(link)\n    link.click()\n    document.body.removeChild(link)\n  }\n}\n"],
+  "mappings": ";;;;;AAEA,IAAI,aAAa;AACjB,cAAY,MAAc;AAAA;AAAA,IAE1B;AAAA,EACA;AACA,cAAY,IAAI,eAAe;AAC/B;AAKO,IAAM,eAAe,OAC1B,eACA,UACA,0BACG;AACH,QAAM,OAAO,MAAM,cAAc,KAAK,WAAW,EAAE,SAAS,QAAQ;AACpE,MAAI,KAAK,MAAM;AACb,UAAM,MAAM,OAAO,IAAI,gBAAgB,KAAK,IAAI;AAChD,UAAM,OAAO,SAAS,cAAc,GAAG;AACvC,SAAK,OAAO;AACZ,SAAK,WAAW;AAChB,aAAS,KAAK,YAAY,IAAI;AAC9B,SAAK,MAAM;AACX,aAAS,KAAK,YAAY,IAAI;AAAA,EAChC;AACF;",
+  "names": []
+}

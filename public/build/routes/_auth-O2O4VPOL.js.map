@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../app/routes/_auth.tsx"],
+  "sourcesContent": ["// REMIX HMR BEGIN\nimport * as __hmr__ from \"remix:hmr\";\nif (import.meta) {\nimport.meta.hot = __hmr__.createHotContext(\n//@ts-expect-error\n\"app/routes/_auth.tsx\"\n);\nimport.meta.hot.lastModified = \"1705519263369.816\";\n}\n// REMIX HMR END\n\nimport { redirect } from '@remix-run/node'\nimport { Outlet } from '@remix-run/react'\nimport { Layout } from '~/components/ui/Layout'\nimport { getSession } from '~/cookies'\nimport { getUserId } from '~/endpoints/user'\n\nexport const loader = async ({ request }: { request: Request }) => {\n  const session = await getSession(request.headers.get('Cookie'))\n  const userId = session.get('userId')\n\n  if (userId) {\n    const loggedInUser = await getUserId(userId)\n    if (loggedInUser) {\n      return redirect(`/organisationlist`)\n    }\n  }\n\n  return null\n}\n\nexport default function _auth() {\n  return (\n    <Layout nonAuth>\n      <Outlet />\n    </Layout>\n  )\n}\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;AAWA,kBAAyB;AAuBnB;AAhCN,IAAI,aAAa;AACjB,cAAY,MAAc;AAAA;AAAA,IAE1B;AAAA,EACA;AACA,cAAY,IAAI,eAAe;AAC/B;AAuBe,SAAR,QAAyB;AAC9B,SACE,mDAAC,UAAO,SAAO,MACb,6DAAC,YAAD;AAAA;AAAA;AAAA;AAAA,SAAQ,KADV;AAAA;AAAA;AAAA;AAAA,SAEA;AAEJ;",
+  "names": []
+}

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../app/styles/genericStyles.tsx"],
+  "sourcesContent": ["// REMIX HMR BEGIN\nimport * as __hmr__ from \"remix:hmr\";\nif (import.meta) {\nimport.meta.hot = __hmr__.createHotContext(\n//@ts-expect-error\n\"app/styles/genericStyles.tsx\"\n);\nimport.meta.hot.lastModified = \"1701627522281.7644\";\n}\n// REMIX HMR END\n\nexport const chip = 'border w-20 rounded-full p-2 text-center'\nexport const chipGreenColor = 'bg-green-100 text-green-900'\nexport const chipGrayLightColor = 'bg-gray-100 text-gray-800'\nexport const chipGrayDarkColor = 'bg-gray-300 text-gray-800'\nexport const chipBlueColor = 'bg-cyan-100 text-gray-800'\nexport const chipRedColor = 'bg-red-100 text-red-800'\nexport const chipYellowColor = 'bg-yellow-100 text-yellow-800'\n\nexport const filterChip = 'flex cursor-pointer rounded-lg bg-gray-200 p-2'\n\nexport const genericGray = 'gray'\n"],
+  "mappings": ";;;;;AAEA,IAAI,aAAa;AACjB,cAAY,MAAc;AAAA;AAAA,IAE1B;AAAA,EACA;AACA,cAAY,IAAI,eAAe;AAC/B;AAGO,IAAM,OAAO;AACb,IAAM,iBAAiB;AACvB,IAAM,qBAAqB;AAC3B,IAAM,oBAAoB;AAC1B,IAAM,gBAAgB;AACtB,IAAM,eAAe;AACrB,IAAM,kBAAkB;AAExB,IAAM,aAAa;",
+  "names": []
+}
